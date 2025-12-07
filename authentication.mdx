@@ -1,0 +1,89 @@
+---
+title: Authentication
+description: Learn how to authenticate with VB Mgzn API and secure your documentation
+---
+
+## Overview
+
+Authentication is crucial for securing access to your VB Mgzn documentation projects. Our platform supports multiple authentication methods to fit different use cases, from simple API keys for quick access to OAuth for enterprise integrations.
+
+<Tabs>
+  <Tab title="API Key" icon="key">
+    Use API keys for direct access to your documentation resources.
+  </Tab>
+  <Tab title="OAuth" icon="lock">
+    Implement OAuth 2.0 for secure, delegated access.
+  </Tab>
+  <Tab title="JWT" icon="shield">
+    Leverage JSON Web Tokens for stateless authentication.
+  </Tab>
+</Tabs>
+
+## API Key Authentication
+
+API keys provide a straightforward way to authenticate requests. You can generate keys in your project settings and use them in API calls.
+
+<Steps>
+  <Step title="Generate Key" icon="key">
+    Navigate to your project settings and create a new API key.
+  </Step>
+  <Step title="Include in Headers" icon="settings">
+    Add the API key to the Authorization header of your requests.
+    ````javascript
+    const response = await fetch('/api/documents', {
+      headers: {
+        'Authorization': 'Bearer YOUR_API_KEY'
+      }
+    });
+    ````
+  </Step>
+  <Step title="Test Access" icon="check">
+    Verify your key works by making a test API call.
+  </Step>
+</Steps>
+
+## OAuth Integration
+
+For more advanced security requirements, OAuth 2.0 provides a robust framework for delegated access.
+
+<CodeGroup tabs="JavaScript,Python">
+  ```javascript
+const oauthConfig = {
+  clientId: 'your_client_id',
+  redirectUri: 'https://yourapp.com/callback',
+  scope: 'documents:read documents:write'
+};
+```
+  ```python
+import requests
+
+response = requests.post('https://api.vbmgzn.com/oauth/token',
+  data={
+    'grant_type': 'authorization_code',
+    'client_id': 'your_client_id',
+    'client_secret': 'your_client_secret',
+    'code': 'authorization_code'
+  })
+```
+</CodeGroup>
+
+<Callout kind="tip">Store your API keys securely and never expose them in client-side code.</Callout>
+
+## JWT Tokens
+
+JSON Web Tokens offer stateless authentication with built-in expiration and claims.
+
+| Method | Description | Use Case |
+|--------|-------------|----------|
+| API Key | Simple header-based auth | Quick prototyping |
+| OAuth | Delegated access | Enterprise integrations |
+| JWT | Stateless tokens | Mobile applications |
+
+<ExpandableGroup>
+  <Expandable title="Token Expiration" default-open="false">
+    JWT tokens automatically expire after a set period. Implement refresh logic to maintain access.
+  </Expandable>
+  <Expandable title="Security Best Practices" default-open="false">
+    Always use HTTPS, rotate keys regularly, and implement rate limiting.
+  </Expandable>
+</ExpandableGroup>

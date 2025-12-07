@@ -1,0 +1,83 @@
+---
+title: Webhooks
+description: Set up webhooks to receive real-time notifications from VB Mgzn Documentation
+---
+
+## Introduction to Webhooks
+
+Webhooks allow you to receive instant notifications when events occur in your VB Mgzn documentation projects. This enables real-time integrations with external systems and automated workflows.
+
+<Columns cols={2}>
+  <Card title="Event-Driven" icon="bell" href="#">
+    React to documentation changes, comments, and approvals.
+  </Card>
+  <Card title="Real-Time" icon="zap" href="#">
+    Get notifications instantly when events happen.
+  </Card>
+</Columns>
+
+## Setting Up Webhooks
+
+Create and configure webhooks in your project settings to start receiving event notifications.
+
+<Steps>
+  <Step title="Access Settings" icon="settings">
+    Go to your project settings and navigate to the webhooks section.
+  </Step>
+  <Step title="Create Webhook" icon="plus">
+    Add a new webhook with your endpoint URL and select event types.
+    ````javascript
+const webhookData = {
+  url: 'https://yourapp.com/webhook',
+  events: ['document.created', 'document.updated'],
+  secret: 'your_webhook_secret'
+};
+
+fetch('/api/webhooks', {
+  method: 'POST',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify(webhookData)
+});
+````
+  </Step>
+  <Step title="Test Connection" icon="check-circle">
+    Send a test event to verify your endpoint receives notifications.
+  </Step>
+</Steps>
+
+## Event Types
+
+VB Mgzn sends notifications for various events related to your documentation.
+
+<Tabs>
+  <Tab title="Document Events" icon="file-text">
+    Notifications for document creation, updates, and deletions.
+  </Tab>
+  <Tab title="Comment Events" icon="message-square">
+    Alerts when comments are added or resolved.
+  </Tab>
+  <Tab title="Approval Events" icon="check-circle">
+    Notifications for approval requests and completions.
+  </Tab>
+</Tabs>
+
+<Callout kind="info">Webhook payloads include detailed information about the event, including timestamps, user details, and changed content.</Callout>
+
+## Security and Best Practices
+
+Secure your webhook endpoints and follow best practices to prevent abuse.
+
+| Practice | Description | Benefit |
+|----------|-------------|---------|
+| Verify Signatures | Use webhook secrets to verify payload authenticity | Prevent spoofing attacks |
+| Rate Limiting | Implement rate limits on your endpoint | Protect against abuse |
+| Error Handling | Handle failures gracefully with retries | Ensure reliable delivery |
+
+<ExpandableGroup>
+  <Expandable title="Payload Verification" default-open="false">
+    Verify webhook signatures using the shared secret to ensure requests come from VB Mgzn.
+  </Expandable>
+  <Expandable title="Retry Logic" default-open="false">
+    Implement exponential backoff for failed webhook deliveries to handle temporary issues.
+  </Expandable>
+</ExpandableGroup>

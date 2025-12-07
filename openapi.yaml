@@ -1,0 +1,103 @@
+openapi: '3.0.0'
+info:
+  version: 1.0.0
+  title: VB Mgzn API
+  license:
+    name: MIT
+servers:
+  - url: http://api.vbmgzn.com/v1
+paths:
+  /documents:
+    get:
+      summary: Retrieve a list of all documents in the system. This endpoint supports pagination and filtering to help manage large collections of documentation. Returns detailed document metadata including titles, creation dates, and author information.
+      operationId: listDocuments
+      parameters:
+        - name: limit
+          in: query
+          description: How many items to return at one time (max 100)
+          required: false
+          schema:
+            type: integer
+            format: int32
+      responses:
+        200:
+          description: An paged array of documents
+          headers:
+            x-next:
+              description: A link to the next page of responses
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Documents'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      summary: Create a new document in the system. This operation allows you to add fresh documentation content with full metadata support. The endpoint validates input and returns the created document with a unique identifier.
+      operationId: createDocuments
+      responses:
+        201:
+          description: Document creation successful
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /documents/{documentId}:
+    get:
+      summary: Fetch detailed information about a specific document. This endpoint provides comprehensive document data including content, metadata, and revision history. Use this to retrieve individual documents for viewing or editing purposes.
+      operationId: showDocumentById
+      parameters:
+        - name: documentId
+          in: path
+          required: true
+          description: The id of the document to retrieve
+          schema:
+            type: string
+      responses:
+        200:
+          description: Document details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Documents'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Document:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          format: int64
+        name:
+          type: string
+        tag:
+          type: string
+    Documents:
+      type: array
+      items:
+        $ref: '#/components/schemas/Document'
+    Error:
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
